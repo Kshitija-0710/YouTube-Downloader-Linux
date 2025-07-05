@@ -1,0 +1,7 @@
+*.log
+*.mp4
+*.mkv
+*.webm
+*.part
+youtube-downloader/videos/*
+youtube-downloader/logs/*

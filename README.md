@@ -1,27 +1,31 @@
 # 🎬 YouTube Downloader - Linux Terminal Version
 
+[![Shell Script](https://img.shields.io/badge/Shell-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![OS: Linux](https://img.shields.io/badge/platform-Linux-blue.svg)
+![Repo Size](https://img.shields.io/github/repo-size/Kshitija-0710/YouTube-Downloader-Linux)
+
 A professional, DevOps-style Bash script for downloading YouTube videos on Linux using `yt-dlp`.
+
+---
 
 ## 🚀 Features
 
-- Interactive user input with YouTube URL validation
-- Automatic setup of folders and logging system
-- `yt-dlp` installation (if not found)
-- Color-coded terminal output and banners for a smooth experience
+- 🎥 YouTube video download with resolution selection
+- ✅ URL validation & playlist restriction (`--no-playlist`)
+- 📁 Auto-create folders and logs
+- 🔄 Auto-installs `yt-dlp` if missing
+- 🖥️ Color-coded banner & status output
+
+---
 
 ## 📦 Requirements
 
 - Linux environment
-- `yt-dlp` (auto-installs if missing)
-- `bash` shell
+- `yt-dlp` (auto-installed)
+- Bash shell
 
-## 📂 Folder Structure
-
-```
-YouTube-Downloader-Linux/
-├── youtube-downloader.sh
-├── README.md
-```
+---
 
 ## 🔧 How to Use
 
@@ -30,10 +34,37 @@ chmod +x youtube-downloader.sh
 ./youtube-downloader.sh
 ```
 
+---
+
+## 📂 Folder Structure
+
+```
+YouTube-Downloader-Linux/
+├── youtube-downloader.sh
+├── README.md
+├── LICENSE
+├── .gitignore
+```
+
+---
+
+## 📸 Screenshot
+
+![Screenshot](Final-output.png)
+
+---
+
 ## 🧑‍💻 Author
 
 **Kshitija Randive**  
-DevOps | GCP | AWS | CI/CD | Linux Automation
+DevOps Engineer | GCP | AWS | CI/CD | Linux Automation
 
 ---
-*Built with ♥ for DevOps practice and portfolio enhancement.*
+
+## ⚖️ License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+> Built with ♥ for DevOps practice and Linux terminal automation.
