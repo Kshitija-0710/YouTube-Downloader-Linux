@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# YOUTUBE VIDEO DOWNLOADER FOR LINUX - BY KSHITIJA RANDIVE
-# DevOps-style Bash script using yt-dlp with validation and logging
+# 🎬 YOUTUBE VIDEO DOWNLOADER FOR LINUX
+# 🔧 Created by Kshitija Randive | DevOps • GCP • AWS • Linux
 
 set -e
 
+# ---------------- Colors & Logging ----------------
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -18,6 +19,7 @@ info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
 success() { echo -e "${PURPLE}[SUCCESS]${NC} $1"; }
 error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
+# ---------------- Banner ----------------
 show_banner() {
     clear
     echo -e "${CYAN}"
@@ -28,41 +30,61 @@ show_banner() {
     echo -e "${NC}"
 }
 
+# ---------------- Execution ----------------
 show_banner
 
 DOWNLOAD_DIR="$HOME/youtube-downloader/videos"
 LOG_DIR="$HOME/youtube-downloader/logs"
 
-info "Creating required folders..."
+info "Creating folders if not present..."
 mkdir -p "$DOWNLOAD_DIR"
 mkdir -p "$LOG_DIR"
 
 LOG_FILE="$LOG_DIR/download_$(date +'%Y-%m-%d_%H-%M-%S').log"
-success "Folders created. Log file will be stored at: $LOG_FILE"
+success "Download log will be saved at: $LOG_FILE"
 
-info "Checking if yt-dlp is installed..."
+# ---------------- yt-dlp Check & Update ----------------
+info "Checking yt-dlp installation..."
 if ! command -v yt-dlp &> /dev/null; then
-    info "yt-dlp not found. Installing it now..."
+    info "yt-dlp not found. Installing..."
     sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
     sudo chmod a+rx /usr/local/bin/yt-dlp
-    success "yt-dlp installed successfully!"
+    success "yt-dlp installed."
 else
-    success "yt-dlp is already installed."
+    info "yt-dlp already installed. Checking for updates..."
+    sudo yt-dlp -U || true
 fi
 
+# ---------------- Get Video URL ----------------
 while true; do
     echo
     read -p "🔗 Enter a valid YouTube video URL: " VIDEO_URL
     if [[ $VIDEO_URL =~ ^https?://(www\.)?(youtube\.com|youtu\.be)/.+$ ]]; then
-        success "Valid YouTube URL detected."
+        success "Valid YouTube URL."
         break
     else
-        error "Invalid URL. Please enter a valid YouTube link."
+        error "Invalid URL. Please try again."
     fi
 done
 
-info "Downloading video..."
-yt-dlp -f best -o "$DOWNLOAD_DIR/%(title)s.%(ext)s" "$VIDEO_URL" | tee "$LOG_FILE"
+# ---------------- Download Section ----------------
+echo
+read -p "🎞️  Preferred resolution (e.g., 720p, 1080p or leave blank for best): " RESOLUTION
 
-success "🎉 Download complete! Video saved in: $DOWNLOAD_DIR"
+FORMAT="bestvideo[height<=?${RESOLUTION}]+bestaudio/best"
+if [ -z "$RESOLUTION" ]; then
+    FORMAT="bestvideo+bestaudio/best"
+fi
+
+info "Downloading video..."
+{
+    yt-dlp --no-playlist -f "$FORMAT" -o "$DOWNLOAD_DIR/%(title)s.%(ext)s" "$VIDEO_URL"
+} 2>&1 | tee "$LOG_FILE" || {
+    error "Download failed. Trying fallback method..."
+    yt-dlp --force-generic-extractor -o "$DOWNLOAD_DIR/%(title)s.%(ext)s" "$VIDEO_URL" | tee -a "$LOG_FILE"
+}
+
+success "🎉 Download complete!"
+log "Video saved in: $DOWNLOAD_DIR"
 log "Log saved at: $LOG_FILE"
+
